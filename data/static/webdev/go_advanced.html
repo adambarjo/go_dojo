@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" href="/webdev/img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/webdev/css/reset.css">
+  <link rel="stylesheet" href="/webdev/css/fonts.css">
+  <link rel="stylesheet" href="/webdev/css/main.css">
+  <link rel="stylesheet" id="colour-mode-stylesheet" href="/webdev/css/light-mode.css">
+  <title>Go Advanced</title>
+</head>
+
+<body class="start-mid col" id="top">
+  <button id="menu" aria-roledescription="List of navigation links for mobile users."></button>
+  <nav class="start-mid" aria-expanded="false">
+    <a href="/webdev/">Home</a>
+    <a href="/webdev/go_intro.html">Go Intro</a>
+    <a href="/webdev/go_setup.html">Go Setup</a>
+    <a href="/webdev/go_basics.html">Go Basics</a>
+    <a href="/webdev/go_advanced.html" class="active">Go Advanced</a>
+    <button id="colour-mode" aria-roledescription="Toggle light mode to dark mode and vice versa.">🌓</button>
+  </nav>
+  <a href="#" id="return-to-top" class="button-appearance">Return to top</a>
+  <article>
+    <h1>Go Advanced</h1>
+    <hr>
+    <hr>
+    <hr>
+    <h2>Contents</h2>
+    <ol id="contents">
+      <li><a href="#Defer">Defer</a></li>
+      <li><a href="#Structs">Structs</a></li>
+      <li><a href="#Methods">Methods</a></li>
+      <li><a href="#Public_and_Private">Public and Private</a></li>
+      <li><a href="#Interfaces">Interfaces</a></li>
+      <li><a href="#Goroutines">Goroutines</a></li>
+      <li><a href="#Channels">Channels</a></li>
+      <li><a href="#File_I-O">File I/O</a></li>
+      <li><a href="#The_end">The end</a></li>
+    </ol>
+    <h2 id="Defer">Defer</h2>
+    <p>The keyword defer is used to postpone a statement until the end of the current scope.</p>
+    <p>For example:</p>
+    <p class="code-wrapper">
+      <code> func main() {<br>
+        &nbsp;&nbsp;defer fmt.Println("Goodbye")<br>
+        <br>
+        &nbsp;&nbsp;fmt.Println("Hello")<br>
+        &nbsp;&nbsp;fmt.Println("World")<br>
+      }<br>
+        <br>
+        // Outputs:<br>
+        // Hello<br>
+        // World<br>
+        // Goodbye </code>
+    </p>
+    <p>In many cases, the defer keyword keeps code more readable and sustainable. For example, you may want to open a
+      file to stream its content, but you will need to close the file too. In pseudo-Go-code, you could use:</p>
+    <p class="code-wrapper">
+      <code> func writeToFile() {<br>
+        &nbsp;&nbsp;file.Open("my_file.txt")<br>
+        &nbsp;&nbsp;defer file.Close()<br>
+        &nbsp;&nbsp;// Now you don’t need to worry about closing the file after doing operations<br>
+        &nbsp;&nbsp;file.Read()<br>
+        &nbsp;&nbsp;file.Write()<br>
+        &nbsp;&nbsp;// … etc<br>
+      } </code>
+    </p>
+    <p>You can have multiple deferred statements. They are pushed onto a stack, and so the order is LIFO
+      (last-in-first-out).</p>
+    <h2 id="Structs">Structs</h2>
+    <p>A struct is a collection of fields. Fields must always have an explicit type. Declare a struct like this:</p>
+    <p class="code-wrapper">
+      <code> type Person struct {<br>
+        &nbsp;&nbsp;Name string<br>
+        &nbsp;&nbsp;Age uint<br>
+      }<br>
+      </code></p>
+    <p>Initialise a struct like this:</p>
+    <p class="code-wrapper">
+      <code> func main() {<br>
+        &nbsp;&nbsp;var person1 Person = Person{"Adam", 19}<br>
+        <br>
+        &nbsp;&nbsp;// Or<br>
+        &nbsp;&nbsp;person2 := Person{"John", 20}<br>
+        <br>
+        &nbsp;&nbsp;// Or a more verbose version<br>
+        &nbsp;&nbsp;person3 := Person{<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Name: "Baz",<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Age: 21,<br>
+        &nbsp;&nbsp; }<br>
+      }</code>
+    </p>
+    <p>And access fields in a struct with dot notation:</p>
+    <p class="code-wrapper"><code> fmt.Println(person1.Name)<br>
+      // Outputs: "Adam" </code></p>
+    <h2 id="Methods">Methods</h2>
+    <p>Functions can be accessed through a <code>type</code>. A function accessed through a <code>type</code> is
+      referred to as a method. In Go, there is no classes, however a <code>type</code> which is given a
+      <code>struct</code> of fields, and also given its own functions, will operate the same as class in other
+      languages.</p>
+    <p>For example, a type Person may have a method Wave.</p>
+    <p>Define a method on a type like this:</p>
+    <p class="code-wrapper">
+      <code> type Person struct {<br>
+        &nbsp;&nbsp;Name string<br>
+        &nbsp;&nbsp;Age int<br>
+      }<br>
+        <br>
+        func (p Person) Wave() {<br>
+        &nbsp;&nbsp;fmt.Println(p.Name, "is waving")<br>
+      }<br>
+        <br>
+        func main() {<br>
+        &nbsp;&nbsp;person1 := Person{"Adam", 19}<br>
+        &nbsp;&nbsp;person1.Wave()<br>
+        &nbsp;&nbsp;// Outputs "Adam is waving"<br>
+      } </code>
+    </p>
+    <p>The name of the type of which the function is defined for, is described in its own parameter list, in between the
+      func keyword, and the name of the function.</p>
+    <p>In the example above, <code>p</code> is declared as <code>type</code> <code>Person</code>. This is to say that
+      the current function is a method on <code>Person</code>, and we can access the fields of <code>Person</code>
+      through <code>p</code>. In other languages, you may use <code>this</code> or <code>self</code> to access fields
+      from a method. <code>p</code> can be named whatever you like, even <code>this</code> or <code>self</code> if that
+      makes it easier, but the Go standard is to name it a shortened version of the type name, generally the first
+      letter.</p>
+    <p>A <code>type</code> doesn’t need to have a <code>struct</code> to have methods.</p>
+    <p class="codet-wrapper">
+      <code> type MyInteger int<br>
+        <br>
+        func (m myInteger) Next() {<br>
+        &nbsp;&nbsp;return m + 1<br>
+      } </code></p>
+    <p>Like with normal functions, you must use pointers to change values by reference. With methods, do this by
+      accepting the type as a pointer, like this:</p>
+    <p class="code-wrapper">
+      <code> type Person struct {<br>
+        &nbsp;&nbsp;Name string<br>
+        &nbsp;&nbsp;Age int<br>
+      }<br>
+        <br>
+        func (p *Person) UpdateName(newName string) {<br>
+        &nbsp;&nbsp;p.Name = newName<br>
+      } </code>
+    </p>
+    <p>Notice we use p *Person instead of p Person. Now when we try to change the value of one of the fields, the value
+      the value changes for the type.</p>
+    <p>Structs may use a <code>String()</code> method, which will be used when printing the type. For example:</p>
+    <p class="code-wrapper">
+      <code> func (p Person) String() string {<br>
+        &nbsp;&nbsp;return fmt.Sprintf("%s is %d years old", p.Name, p.Age)<br>
+      } </code>
+    </p>
+    <p>Now when printing Person the above formatted string will be printed instead.</p>
+    <h2 id="Public_and_Private">Public and Private</h2>
+    <p>In Go, declarations can be made public or private.</p>
+    <p>Declaring as public is simply done using an uppercase first character. You may have noticed all the functions we
+      access from packages use an uppercase first character. Such as</p>
+    <p class="code-wrapper"><code>fmt.Println()</code></p>
+    <p>Any declarable entity can be made public or private. The visibility of the entity exists within the scope of the
+      package. For example, consider there 2 packages, <code>package main</code>, and <code>package car</code>.</p>
+    <p><code>package car</code> looks like this:</p>
+    <p class="code-wrapper">
+      <code> package car<br>
+        <br>
+        // carsList declared as private (lowercase ‘c’) cannot be accessed from package main<br>
+        var carsList = []car{}<br>
+        <br>
+        type car struct {<br>
+        &nbsp;&nbsp;wheels uint<br>
+        &nbsp;&nbsp;speed float64<br>
+      }<br>
+        <br>
+        // New is declared as public (uppercase ‘N’) and is used to create a new car and add it to the carsList<br>
+        func New(wheels uint, speed float64) car {<br>
+        &nbsp;&nbsp;newCar := car{wheels, speed}<br>
+        &nbsp;&nbsp;carsList = append(carsList, newCar)<br>
+        &nbsp;&nbsp;return newCar<br>
+      }<br>
+        <br>
+        // car fields private so cannot be accessed from package main, but accessor methods can be used to return the values<br>
+        func (c *car) GetSpeed() float64 {<br>
+        &nbsp;&nbsp;return c.speed<br>
+      }<br>
+        <br>
+        func (c *car) GetWheels() uint {<br>
+        &nbsp;&nbsp;return c.wheels<br>
+      }</code>
+    </p>
+    <p>And in package main:</p>
+    <p class="code-wrapper">
+      <code>package main<br>
+        <br>
+        import (<br>
+        &nbsp;&nbsp;"car"<br>
+        &nbsp;&nbsp;"fmt"<br>
+        )<br>
+        <br>
+        func main() {<br>
+        &nbsp;&nbsp;car1 := car.New(4, 60)<br>
+        <br>
+        &nbsp;&nbsp;fmt.Println(car1.speed)<br>
+        &nbsp;&nbsp;// Causes an error, car1.speed is undefined (it’s a private field)<br>
+        <br>
+        &nbsp;&nbsp;fmt.Println(car1.GetSpeed())<br>
+        &nbsp;&nbsp;// Allows us to get the value of the speed field<br>
+      }</code>
+    </p>
+    <h2 id="Interfaces">Interfaces</h2>
+    <p>An interface is a list of method signatures. An interface is defined like this:</p>
+    <p class="code-wrapper">
+      <code> type Shape interface {<br>
+        &nbsp;&nbsp;area() float64<br>
+        &nbsp;&nbsp;volume() float64<br>
+      } </code></p>
+    <p>Then a function can be declared with a parameter, of type <code>Shape</code>:</p>
+    <p class="code-wrapper">
+      <code> func measure(s Shape) {<br>
+        &nbsp;&nbsp;fmt.Println(s.area())<br>
+        &nbsp;&nbsp;fmt.Println(s.volume))<br>
+      } </code>
+    </p>
+    <p>This is to say that the <code>measure</code> function will only accept types which meet the criteria of the
+      <code>Shape</code> interface. For example, you may declare a <code>circle</code> type. As long as it has methods
+      for <code>area</code>, and <code>volume</code>, it will be able to measured by the <code>measure</code> function.
+    </p>
+    <h2 id="Goroutines">Goroutines</h2>
+    <p>Goroutines allow for simple and easy to use native concurrency. A goroutine is a lightweight thread managed by
+      the Go runtime. To use a goroutine, simply write <code>go</code> in front of a function call.</p>
+    <p class="code-wrapper"><code>go myFunction()</code></p>
+    <p>Declaring a goroutine allows it to run alongside the program until the program terminates. It’s important to note
+      that a goroutine will not stop a program from terminating. Consider this:</p>
+    <p class="code-wrapper">
+      <code> import (<br>
+        &nbsp;&nbsp;"fmt"<br>
+        &nbsp;&nbsp;"time"<br>
+        )<br>
+        <br>
+        // countInfinitely will print an integer which increments every 1 second<br>
+        func countInfinitely() {<br>
+        &nbsp;&nbsp;i := 0<br>
+        &nbsp;&nbsp;for {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;fmt.Println(i)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;i++<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;time.Sleep(time.Second)<br>
+        &nbsp;&nbsp;}<br>
+      }<br>
+        <br>
+        func main() {<br>
+        &nbsp;&nbsp;go countInfinitely()<br>
+        <br>
+        &nbsp;&nbsp;// Wait for 5 seconds, then the program terminates<br>
+        &nbsp;&nbsp;time.Sleep(time.Second * 5)<br>
+      }</code>
+    </p>
+    <p>Even though the <code>countInfinitely()</code> function is written to run infinitely, the program terminates
+      after 5 seconds. So what we see is only <code>0 1 2 3</code> and <code>4</code> printed to the terminal.</p>
+    <p>Goroutines are very lightweight, and so a huge number of goroutines can be spawned to run synchronously. On a
+      machine with 4GB of memory, the maximum number of goroutines is slightly less than 1 million.</p>
+    <p>It’s also important to note that goroutines do not run in parallel. In fact, goroutines spawn completely
+      randomly. For example:</p>
+    <p class="code-wrapper">
+      <code> func main() {<br>
+        &nbsp;&nbsp;go fmt.Println("The")<br>
+        &nbsp;&nbsp;go fmt.Println("quick")<br>
+        &nbsp;&nbsp;go fmt.Println("brown")<br>
+        &nbsp;&nbsp;go fmt.Println("fox")<br>
+        &nbsp;&nbsp;go fmt.Println("jumps")<br>
+        &nbsp;&nbsp;go fmt.Println("over")<br>
+        &nbsp;&nbsp;go fmt.Println("the")<br>
+        &nbsp;&nbsp;go fmt.Println("lazy")<br>
+        &nbsp;&nbsp;go fmt.Println("dog.")<br>
+        <br>
+        &nbsp;&nbsp;time.Sleep(time.Second * 5)<br>
+      }</code>
+    </p>
+    <p><code>time.Sleep</code> plays no significant role here, only to stop the program from terminating.</p>
+    <p>It would be sensible to assume that each word will be printed on a new line in the order in which they were
+      written. What actually gets output to the terminal is this:</p>
+    <p class="code-wrapper"><code> The<br>
+      over<br>
+      the<br>
+      lazy<br>
+      dog.<br>
+      fox<br>
+      quick<br>
+      jumps<br>
+      brown </code>
+    </p>
+    <p>And running the program again would produce a new list in a random order. You can think of it as if all
+      goroutines within the current scope collapse onto the same line, and so they all get spawned at the same moment.
+    </p>
+    <p>However, goroutines can work in harmony with the use of channels.</p>
+    <h2 id="Channels">Channels</h2>
+    <p>Channels allow goroutines to communicate with each other, sync up, and work towards a common objective.</p>
+    <p>Declare a channel like this:</p>
+    <p class="code-wrapper"><code>var myChannel chan string</code></p>
+    <p>This will declare a channel which can hold <code>string</code> types.</p>
+    <p>Make a channel, like with maps, with the <code>make</code> function:</p>
+    <p class="code-wrapper"><code>c := make(chan string)</code></p>
+    <p>Channels have two features: send and receive.</p>
+    <p>The <code>&lt;-</code> syntax is used to send to or receive from a channel, depending on which side it’s written
+      on. For example:</p>
+    <p class="code-wrapper"><code> fmt.Println(&lt;-c); </code> </p>
+    <p>This will print the value stored inside the channel.</p>
+    <p>To send to a channel, use the arrow on the right-hand side:</p>
+    <p>c &lt;- "Hello channel"</p>
+    <p>Note: The whitespace around the arrow is unimportant, however the examples above show how the Go formatter
+      chooses to place whitespace.</p>
+    <p>Channels in Go are blocking. This is to say, that the goroutine will not continue until it can send or receive on
+      the channel.</p>
+    <p>This is useful as it allows channels to sync up.</p>
+    <p>We can modify the <code>countInfinitely()</code> function to receive a channel and send to that channel when we
+      want it to stop.</p>
+    <p class="code-wrapper">
+      <code> func countInfinitely(c chan string) {<br>
+        &nbsp;&nbsp;i := 0<br>
+        &nbsp;&nbsp;for {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;fmt.Println(i)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;if i == 20 {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c &lt;- "Done"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;} else {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i++<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;}<br>
+      } </code>
+    </p>
+    <p>And in the main function:</p>
+    <p class="code-wrapper">
+      <code> func main() {<br>
+        &nbsp;&nbsp;c := make(chan string)<br>
+        &nbsp;&nbsp;go countInfinitely(c)<br>
+        &nbsp;&nbsp;fmt.Println(&lt;-c)<br>
+      } </code>
+    </p>
+    <p>Notice how there is no <code>time.Sleep</code> function this time. This is because we are receiving on the
+      channel <code>c</code>, the program will only continue when it receives a value. We don’t have to print the value
+      out, if we are only using the channel for halting purposes we can just write:</p>
+    <p class="code-wrapper">
+      <code> func main() {<br>
+        &nbsp;&nbsp;c := make(chan string)<br>
+        &nbsp;&nbsp;go countInfinitely(c)<br>
+        &nbsp;&nbsp;&lt;-c<br>
+      }</code>
+    </p>
+    <p>In these examples, the channels are used to send and receive only 1 value. Channels can have an implemented
+      buffer to send a receive more than a single value. Make buffered channels like this:</p>
+    <p class="code-wrapper"><code>c := make(chan string, 3)</code></p>
+    <p>Buffered channels operate on a FIFO basis, first-in-first-out.</p>
+    <p class="code-wrapper">
+      <code> func main() {<br>
+        &nbsp;&nbsp;c := make(chan string, 3)<br>
+        &nbsp;&nbsp;c &lt;- "Uno"<br>
+        &nbsp;&nbsp;c &lt;- "Dos"<br>
+        &nbsp;&nbsp;c &lt;- "Tres"<br>
+        &nbsp;&nbsp;fmt.Println(&lt;-c)<br>
+        &nbsp;&nbsp;fmt.Println(&lt;-c)<br>
+        &nbsp;&nbsp;fmt.Println(&lt;-c)<br>
+      } </code>
+    </p>
+    <p>Outputs:</p>
+    <p class="code-wrapper"><code> Uno<br>
+      Dos<br>
+      Tres<br>
+    </code> </p>
+    <p>Note: The <code>range</code> operator can be used to iterate over elements in a channel.</p>
+    <p class="code-wrapper">
+      <code> func fibonacci(n int, c chan int) {<br>
+        &nbsp;&nbsp;x, y := 0, 1<br>
+        &nbsp;&nbsp;for i := 0; i &lt; n; i++ {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;c &lt;- x<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;x, y = y, x+y<br>
+        &nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;close(c)<br>
+      }<br>
+        <br>
+        func main() {<br>
+        &nbsp;&nbsp;c := make(chan int, 10)<br>
+        &nbsp;&nbsp;go fibonacci(cap(c), c)<br>
+        &nbsp;&nbsp;for i := range c {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;fmt.Println(i)<br>
+        &nbsp;&nbsp;}<br>
+      } </code>
+    </p>
+    <p>The <code>select</code> statement allows a goroutine to wait for a value from a selection of channels. Its syntax
+      is similar to that of <code>switch</code>:</p>
+    <p class="code-wrapper">
+      <code> func fibonacci(c, quit chan int) {<br>
+        &nbsp;&nbsp;x, y := 0, 1<br>
+        &nbsp;&nbsp;for {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;select {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;case c &lt;- x:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x, y = y, x+y<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;case &lt;-quit:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fmt.Println("quit")<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;}<br>
+      }<br>
+        <br>
+        func main() {<br>
+        &nbsp;&nbsp;c := make(chan int)<br>
+        &nbsp;&nbsp;quit := make(chan int)<br>
+        &nbsp;&nbsp;go func() {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;for i := 0; i &lt; 10; i++ {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fmt.Println(&lt;-c)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;quit &lt;- 0<br>
+        &nbsp;&nbsp;}()<br>
+        &nbsp;&nbsp;fibonacci(c, quit)<br>
+      } </code>
+    </p>
+    <p>The <code>select</code> statement in this example shows that if a value is received on the channel
+      <code>x</code>, then fibonacci sequence continues. If a value is received on the channel <code>quit</code>, then
+      "quit" is printed to console and <code>return</code> is used to terminate the function. In this example
+      <code>0</code> is sent to the <code>quit</code> channel, however, as the value is never read, any integer would
+      have been valid.</p>
+    <h2 id="File_I-O">File I/O</h2>
+    <p>Most file input/output is done using the <code>os</code> and <code>io/ioutil</code> native packages.</p>
+    <p>We’ll create a package that will allow for basic I/O operations.</p>
+    <p class="code-wrapper"><code>package fileio</code></p>
+    <p>To create files, use <code>os.Create()</code>. This function returns 2 values, the file which has been created,
+      and a potential <code>error</code>.</p>
+    <p class="code-wrapper">
+      <code> func Create(path string) {<br>
+        &nbsp;&nbsp;f, err := os.Create(path)<br>
+        &nbsp;&nbsp;defer f.Close()<br>
+      } </code>
+    </p>
+    <p>In Go, all declared variables must be used, otherwise they are redundant. So we’ll need to handle the error.</p>
+    <p class="code-wrapper"><code> if err != nil {<br>
+      &nbsp;&nbsp;panic(err)<br>
+    }</code> </p>
+    <p>This is to say, if there is an error, throw a <code>panic</code>. A <code>panic</code> in Go stops the program
+      and displays a message. Passing err to <code>panic</code> will show the error message.</p>
+    <p>Since there’s going to be a lot of error handling, write a function to perform this operation:</p>
+    <p class="code-wrapper">
+      <code>func check(err error) {<br>
+        &nbsp;&nbsp;if err != nil {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;panic(err)<br>
+        &nbsp;&nbsp;}<br>
+      }</code>
+    </p>
+    <p>The function takes a value of type <code>error</code>, and checks it to see if it’s <code>nil</code>, and if not
+      then panic with the error message.</p>
+    <p>Add this to the <code>Create</code> function:</p>
+    <p class="code-wrapper">
+      <code>func Create(path string) {<br>
+        &nbsp;&nbsp;&nbsp;f, err := os.Create(path)<br>
+        &nbsp;&nbsp;&nbsp;defer f.Close()<br>
+        &nbsp;&nbsp;&nbsp;check(err)<br>
+      }</code>
+    </p>
+    <p>To read files, use the <code>io/ioutil</code> package:</p>
+    <p class="code-wrapper">
+      <code>func Read(path string) {<br>
+        &nbsp;&nbsp;b, err := ioutil.ReadFile(path)<br>
+        &nbsp;&nbsp;check(err)<br>
+        &nbsp;&nbsp;return string(b)<br>
+      }</code>
+    </p>
+    <p>The <code>ioutil.ReadFile</code> function reads the file as an array of <code>byte</code>, so we need to use
+      <code>string()</code> to convert it into <code>string</code> format.</p>
+    <p>To write and append files, use <code>os.OpenFile</code>.</p>
+    <p>This function takes a number of parameters. The first is the path to the file, from the parameter passed in. The
+      second is a flag used to determine what system call is used to open the file. Use them like this:</p>
+    <p class="code-wrapper">
+      <code> // Exactly one of O_RDONLY, O_WRONLY, or O_RDWR must be specified.<br>
+        O_RDONLY int = syscall.O_RDONLY // open the file read-only.<br>
+        O_WRONLY int = syscall.O_WRONLY // open the file write-only.<br>
+        O_RDWR int = syscall.O_RDWR // open the file read-write.<br>
+        // The remaining values may be or'ed in to control behavior.<br>
+        O_APPEND int = syscall.O_APPEND // append data to the file when writing.<br>
+        O_CREATE int = syscall.O_CREAT // create a new file if none exists.<br>
+        O_EXCL int = syscall.O_EXCL // used with O_CREATE, file must not exist.<br>
+        O_SYNC int = syscall.O_SYNC // open for synchronous I/O.<br>
+        O_TRUNC int = syscall.O_TRUNC // truncate regular writable file when opened. </code>
+    </p>
+    <p>Lastly is the permissions used to open the file. This isn’t important for this operation, so we can set this to
+      <code>0</code>.</p>
+    <p class="code-wrapper">
+      <code>func Write(path, data string) {<br>
+        &nbsp;&nbsp;f, err := os.OpenFile(path, os.O_WRONLY, 0)<br>
+        &nbsp;&nbsp;defer f.Close()<br>
+        &nbsp;&nbsp;check(err)<br>
+        &nbsp;&nbsp;_, err = f.Write([]byte(data))<br>
+        &nbsp;&nbsp;check(err)<br>
+      }</code>
+    </p>
+    <p>The returned file has a method Write, which writes in bytes to the file. So use <code>[]byte()</code> to convert
+      the <code>string</code> data to a <code>byte</code> array.</p>
+    <p class="code-wrapper">
+      <code> func WriteTo(path, data string) {<br>
+        &nbsp;&nbsp;f, err := os.OpenFile(path, os.O_WRONLY|os.O_APPEND, 0)<br>
+        &nbsp;&nbsp;defer f.Close()<br>
+        &nbsp;&nbsp;check(err)<br>
+        &nbsp;&nbsp;_, err = f.Write([]byte(data))<br>
+        &nbsp;&nbsp;check(err)<br>
+      } </code>
+    </p>
+    <p>The <code>WriteTo</code> function is similar, but with the <code>os.O_APPEND</code> flag or’ed in.</p>
+    <p>To check if a file exists, use <code>os.Stat()</code>. This returns stats for a file, and a potential error. The
+      error could be one of many potential errors, one of them being that the file doesn’t exist.</p>
+    <p>So instead of using <code>check()</code> to check the error, use <code>os.IsNotExist()</code> which is used to
+      read an error and check if it is the “file doesn’t exist” error.</p>
+    <p class="code-wrapper">
+      <code>func Exists(path string) bool {<br>
+        &nbsp;&nbsp;_, err := os.Stat(path)<br>
+        &nbsp;&nbsp;if os.IsNotExist(err) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;return false<br>
+        &nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;return true<br>
+      }</code>
+    </p>
+    <p>To delete a file, use <code>os.Remove()</code></p>
+    <p class="code-wrapper">
+      <code> func Delete(path string) {<br>
+        &nbsp;&nbsp;err := os.Remove(path)<br>
+        &nbsp;&nbsp;check(err)<br>
+      } </code>
+    </p>
+    <h2 id="The_end">The end</h2>
+    <p>With these fundamentals you are equipped to write Go applications using basic and advanced techniques. The
+      quality of your programs will depend on your programming ability and experience. For more information on
+      programming in Go, visit the <a href="https://golang.org/doc/">Go Docs</a>.</p>
+    <p>Other resources you may find helpful:</p>
+    <p><a href="https://youtu.be/f6kdp27TYZs?t=778">Go Concurrency Patterns</a></p>
+    <iframe height="390" src="https://www.youtube.com/embed/f6kdp27TYZs?start=778"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <p><a href="https://youtu.be/QDDwwePbDtw">Go Advanced Concurrency Patterns</a></p>
+    <iframe height="390" src="https://www.youtube.com/embed/QDDwwePbDtw"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <p>Go Official site: <a href="https://golang.org">https://golang.org</a></p>
+    <a href="/webdev/index.html" class="button-appearance">Back to Home</a>
+  </article>
+  <script src="/webdev/js/main.js"></script>
+</body>
+
+</html>

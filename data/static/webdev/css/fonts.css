@@ -1,0 +1,56 @@
+/* Fonts */
+
+@font-face {
+  font-family: "HKG-REG";
+  src: url(/webdev/fonts/HKGrotesk-Regular.otf);
+}
+
+@font-face {
+  font-family: "HKG-LIGHT";
+  src: url(/webdev/fonts/HKGrotesk-Light.otf);
+}
+
+@font-face {
+  font-family: "HKG-ITALIC";
+  src: url(/webdev/fonts/HKGrotesk-Italic.otf);
+}
+
+@font-face {
+  font-family: "HKG-BOLD";
+  src: url(/webdev/fonts/HKGrotesk-Bold.otf);
+}
+
+@font-face {
+  font-family: "HKG-BOLD-ITALIC";
+  src: url(/webdev/fonts/HKGrotesk-BoldItalic.otf);
+}
+
+@font-face {
+  font-family: "HKG-SEMIBOLD";
+  src: url(/webdev/fonts/HKGrotesk-SemiBold.otf);
+}
+
+@font-face {
+  font-family: "HKG-SEMIBOLD-ITALIC";
+  src: url(/webdev/fonts/HKGrotesk-SemiBoldItalic.otf);
+}
+
+@font-face {
+  font-family: "HKG-MED";
+  src: url(/webdev/fonts/HKGrotesk-Medium.otf);
+}
+
+@font-face {
+  font-family: "HKG-MED-ITALIC";
+  src: url(/webdev/fonts/HKGrotesk-MediumItalic.otf);
+}
+
+@font-face {
+  font-family: "RBTO-MED";
+  src: url(/webdev/fonts/RobotoMono-Medium.ttf);
+}
+
+@font-face {
+  font-family: "RBTO-REG";
+  src: url(/webdev/fonts/RobotoMono-Regular.ttf);
+}

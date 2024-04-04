@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" href="/webdev/img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/webdev/css/reset.css">
+  <link rel="stylesheet" href="/webdev/css/fonts.css">
+  <link rel="stylesheet" href="/webdev/css/main.css">
+  <link rel="stylesheet" id="colour-mode-stylesheet" href="/webdev/css/light-mode.css">
+  <title>Go Basics</title>
+</head>
+
+<body class="start-mid col" id="top">
+  <button id="menu" aria-roledescription="List of navigation links for mobile users."></button>
+  <nav class="start-mid" aria-expanded="false">
+    <a href="/webdev/index.html">Home</a>
+    <a href="/webdev/go_intro.html">Go Intro</a>
+    <a href="/webdev/go_setup.html">Go Setup</a>
+    <a href="/webdev/go_basics.html" class="active">Go Basics</a>
+    <a href="/webdev/go_advanced.html">Go Advanced</a>
+    <button id="colour-mode" aria-roledescription="Toggle light mode to dark mode and vice versa.">🌓</button>
+  </nav>
+  <a href="#" id="return-to-top" class="button-appearance">Return to top</a>
+  <article>
+    <h1>Go Basics</h1>
+    <hr>
+    <hr>
+    <hr>
+    <h2>Contents</h2>
+    <ol id="contents">
+      <li><a href="#Development_Environment">Development Environment</a></li>
+      <li><a href="#Packages">Packages</a></li>
+      <li><a href="#Imports">Imports</a></li>
+      <li><a href="#Variables">Variables</a></li>
+      <li><a href="#Functions">Functions</a></li>
+      <li><a href="#Operators">Operators</a></li>
+      <li><a href="#If_statements">If statements</a></li>
+      <li><a href="#Switch_cases">Switch cases</a></li>
+      <li><a href="#Loops">Loops</a></li>
+      <li><a href="#Arrays">Arrays</a></li>
+      <li><a href="#Slices">Slices</a></li>
+      <li><a href="#Maps">Maps</a></li>
+    </ol>
+    <h2 id="Development_Environment">Development Environment</h2>
+    <p>You can write Go code in any text application you like, from a basic notepad program to a fully-fledged
+      integrated development environment.</p>
+    <p>Here are some popular, fully supported environments to develop Go:</p>
+    <p class="code-wrapper">
+      <code>vim: vim-go plugin provides Go programming language support<br>
+        Visual Studio Code: Go extension provides support for the Go programming language<br>
+        GoLand: GoLand is distributed either as a standalone IDE or as a plugin for IntelliJ IDEA Ultimate<br>
+        Atom: Go-Plus is an Atom package that provides enhanced Go support</code>
+    </p>
+    <p>First install Go support for your chosen environment.</p>
+    <h2 id="Packages">Packages</h2>
+    <p>As mentioned in the <a href="/webdev/go_setup.html#Hello_World">Hello world section</a> on the Go Setup page, all
+      Go programs must have a package declaration. At its core, a Go program is made up from a collection of Go
+      packages, even native ones such as <code>fmt</code>.</p>
+    <p>Package names are named after the last element in their directory path, and are lowercase.</p>
+    <p>For example, a package written in the location:</p>
+    <p class="code-wrapper"><code>$GOPATH/src/john/encrypter</code></p>
+    <p>will have a package declaration of</p>
+    <p class="code-wrapper"><code>package encrypter</code></p>
+    <p>The Go tools make it easy to acquire third-party packages.</p>
+    <p>Similar to Node.js' <code>npm</code> or Rust's <code>cargo</code>, Go has <code>go get</code>.</p>
+    <p>The command will clone code from a remote repository into <code>$GOPATH/src</code></p>
+    <p>Use the command like this:</p>
+    <p class="code-wrapper"><code>go get github.com/john/encrypter</code></p>
+    <p>Go will create directory in <code>$GOPATH/src</code> called <code>github.com</code>, inside it, a directory
+      called <code>john</code>, and inside it, a directory called <code>encrypter</code>. Now, all code acquired from
+      <code>john</code>'s GitHub will be cloned to <code>$GOPATH/src/github.com/john</code>.</p>
+    <p class="code-wrapper">
+      <code>src/<br>
+        &nbsp;&nbsp;github.com/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;john/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;encrypter/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;encrypter.go</code>
+    </p>
+    <p><code>git</code> is required for <code>go get</code> to work.</p>
+    <p>Note: <code>encrypter.go</code> will have a package declaration of <code>package encrypter</code>. Multiple files
+      on the same level can have the same package declaration. For example, consider this:</p>
+    <p class="code-wrapper">
+      <code>john/<br>
+        &nbsp;&nbsp;encrypter/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;encrypter_constants.go<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;encrypter_functions.go</code>
+    </p>
+    <p>Both <code>encrypter_constants.go</code> and <code>encrypter_functions.go</code> will both have a package
+      declaration of <code>package encrypter</code>, and Go will treat the files like 1 big file.</p>
+    <h2 id="Imports">Imports</h2>
+    <p>You can import packages with the <code>import</code> keyword.</p>
+    <p>There are two locations Go will look to import packages.</p>
+    <p class="code-wrapper"><code>$GOPATH</code></p>
+    <p>and</p>
+    <p class="code-wrapper"><code>$GOROOT</code></p>
+    <p><code>$GOROOT</code> is where your Go installation is. This location also contains many native packages such as
+      <code>fmt</code>, <code>math</code>, and <code>net</code>. A full list of the standard library can be found <a
+        href="https://golang.org/pkg/">here</a>. </p>
+    <p>Packages that you write yourself, or acquire from external sources, are stored in <code>$GOPATH/src</code>.</p>
+    <p>Use the <code>import</code> keyword to import packages.</p>
+    <p>Like in the Hello World application, we used </p>
+    <p class="code-wrapper"><code>import "fmt"</code></p>
+    <p> to import the <code>fmt</code> package, we can import any packages from the standard library or ones stored in
+      <code>$GOPATH/src</code>.</p>
+    <p class="code-wrapper">
+      <code> import "fmt"<br>
+        import "john/encrypter"<br>
+        // Or import "github.com/john/encrypter" if the package was acquired using go get as described above.<br>
+      </code>
+    </p>
+    <p>For cleaner code, you may choose to list imports like this:</p>
+    <p class="code-wrapper"> <code> import (<br>
+      &nbsp;&nbsp;"fmt"<br>
+      &nbsp;&nbsp;"john/encrypter"<br>
+      )<br>
+    </code>
+    </p>
+    <p>You may also choose to name imports, like this:</p>
+    <p class="code-wrapper"><code>import (<br>
+      &nbsp;&nbsp;enc "john/encrypter"<br>
+      )</code></p>
+    <h2 id="Variables">Variables</h2>
+    <p>Variables can be declared using the <code>var</code> keyword. Variables declared in global scope will always use
+      the <code>var</code> keyword. For example:</p>
+    <p class="code-wrapper">
+      <code>package main<br>
+        <br>
+        import (<br>
+        &nbsp;&nbsp;"fmt"<br>
+        &nbsp;&nbsp;"time"<br>
+        )<br>
+        <br>
+        <span class="highlight">var timeNow = time.Now()</span><br>
+        <br>
+        func main() {<br>
+        &nbsp;&nbsp;fmt.Println(timeNow)<br>
+      }</code>
+    </p>
+    <p>Or multiple variables like this:</p>
+    <p class="code-wrapper">
+      <code>var (<br>
+        &nbsp;&nbsp;myVariable = "foo"<br>
+        &nbsp;&nbsp;myOtherVariable = "bar"<br>
+        )</code></p>
+    <p>Variables can be declared with data types like this:</p>
+    <p class="code-wrapper"><code>var myUnsignedInteger <span class="highlight">uint32</span> = 12345</code></p>
+    <p>However, within the scope of a code block, the <code>var</code> keyword can be omitted, and replaced with the
+      <code>:=</code> assignment operator, like this:</p>
+    <p class="code-wrapper">
+      <code>func sayGreeting() {<br>
+        &nbsp;&nbsp;<span class="highlight">myGreeting := "Hello"</span><br>
+        &nbsp;&nbsp;fmt.Println(myGreeting, "my name is Adam")<br>
+      }</code>
+    </p>
+    <p>Note: arguments passed to <code>fmt.Println()</code> will be printed separated by a space.</p>
+    <p>Here is a list of data types you can assign to variables:</p>
+    <p class="code-wrapper">
+      <code>bool<br>
+        <br>
+        string<br>
+        <br>
+        int int8 int16 int32 <br>
+        int64uint uint8 uint16 uint32 uint64 uintptr<br>
+        <br>
+        byte // alias for uint8<br>
+        rune // alias for int32<br>
+        // represents a Unicode code point<br>
+        <br>
+        float32 float64<br>
+        complex64 complex128</code>
+    </p>
+    <p>The <code>int</code>, <code>uint</code>, and <code>uintptr</code> types are usually 32 bits wide on 32-bit
+      systems and 64 bits wide on 64-bit systems.</p>
+    <p>Number types can be converted using the the name of the type like a function, like this:</p>
+    <p class="code-wrapper">
+      <code>func main() {<br>
+        &nbsp;&nbsp;var myFloat float64 = 12.34<br>
+        &nbsp;&nbsp;var myInteger int = <span class="highlight">int(myFloat)</span><br>
+        &nbsp;&nbsp;fmt.Println(myFloat)<br>
+        &nbsp;&nbsp;// Prints 12<br>
+      }</code>
+    </p>
+    <p>Constants can be declared using the <code>const</code> keyword, never with the <code>:=</code> operator. </p>
+    <p class="code-wrapper"><code>const birthYear = "1999"</code></p>
+    <p>Constants can be declared in global scope and local scope.</p>
+    <p>Like with variables, constants can be declared with or without type declaration.</p>
+    <h2 id="Functions">Functions</h2>
+    <p>The final aspect of the Hello World application is the <code>main</code> function. Functions are declared using
+      the <code>func</code> keyword.</p>
+    <p class="code-wrapper">
+      <code><span class="highlight">func</span> sayHello() {<br>
+        &nbsp;&nbsp;fmt.Println("Hello")<br>
+      }</code></p>
+    <p>Functions can take arguments, which must be explicitly typed.</p>
+    <p class="code-wrapper">
+      <code>func printName(<span class="highlight">myName string</span>) {<br>
+        &nbsp;&nbsp;fmt.Println("My name is", myName)<br>
+      }</code>
+    </p>
+    <p>Multiple parameters can be declared, comma-separated.</p>
+    <p class="code-wrapper">
+      <code>func printDetails(<span class="highlight">firstName string, lastName string, age uint</span>) {<br>
+        &nbsp;&nbsp;fmt.Printf("Name: %s %s\nAge: %d", firstName, lastName, age)<br>
+      }</code>
+    </p>
+    <p>Parameters of the same type can be comma-separated leaving the type declaration until the end.</p>
+    <p class="code-wrapper"><code>firstName string, lastName string, age uint</code></p>
+    <p>shortened to</p>
+    <p class="code-wrapper"><code><span class="highlight">firstName, lastName string</span>, age uint</code></p>
+    <p>because <code>firstName</code> and <code>lastName</code> are both strings.</p>
+    <p>Functions can return values. The type of the value to return is indicated after the parameters and before the
+      opening brace, like this:</p>
+    <p class="code-wrapper">
+      <code>func divideInts(num1, num2 int) <span class="highlight">float64</span> {<br>
+        &nbsp;&nbsp;return float64(num1) / float64(num2)<br>
+      }</code>
+    </p>
+    <p>Multiple values can be returned like this:</p>
+    <p class="code-wrapper">
+      <code>func swapItems(item1, item2 string) <span class="highlight">(string, string)</span> {<br>
+        &nbsp;&nbsp;return item2, item1<br>
+      }<br>
+        <br>
+        func main() {<br>
+        &nbsp;&nbsp;animal1, animal2 := "dog", "cat"<br>
+        &nbsp;&nbsp;animal1, animal2 = swapItems(animal1, animal2)<br>
+        &nbsp;&nbsp;fmt.Println(animal1, animal2)<br>
+        &nbsp;&nbsp;// Prints cat dog<br>
+      }</code>
+    </p>
+    <p>Functions in Go always pass by value. This is to say that passing a variable into a function will make a new,
+      local version of that variable in the function. For example:</p>
+    <p class="code-wrapper">
+      <code>var myName = "Adam"<br>
+        <br>
+        func changeName(newName string) {<br>
+        &nbsp;&nbsp;newName = "Arthur"<br>
+        &nbsp;&nbsp;// newName is a new variable, with the initial value of "Adam"<br>
+        &nbsp;&nbsp;// The variable gets changed to "Arthur", but this doesn't effect the original myName<br>
+      }<br>
+        <br>
+        func main() {<br>
+        &nbsp;&nbsp;changeName(myName)<br>
+        &nbsp;&nbsp;// myName still evaluates to "Adam"<br>
+      }</code>
+    </p>
+    <p>To pass a variable by reference, pass its pointer to the function. <code>changeName</code> must be modified to
+      accept a string pointer.</p>
+    <p class="code-wrapper">
+      <code>var myName = "Adam"<br>
+        func changeName(newName <span class="highlight">*string</span>) {<br>
+        &nbsp;&nbsp;<span class="highlight">*newName</span> = "Arthur"<br>
+        &nbsp;&nbsp;// newName now has the value of a memory address<br>
+        &nbsp;&nbsp;// Use * to get the variable associated with the memory address<br>
+        &nbsp;&nbsp;// In this case, the associated variable is the original myName<br>
+      }<br>
+        <br>
+        func main() {<br>
+        &nbsp;&nbsp;changeName(<span class="highlight">&myName</span>)<br>
+        &nbsp;&nbsp;// Use & to generate a pointer to the variable, and pass that into the function<br>
+        &nbsp;&nbsp;// Now the altered function is instructed to change the variable associate with<br>
+        &nbsp;&nbsp;// that memory address, and so myName evaluates to "Arthur"<br>
+      }</code>
+    </p>
+    <h2 id="Operators">Operators</h2>
+    <p>Operators can be used to perform operations. Here is a list of operators and how to use them:</p>
+    <table>
+      <tr>
+        <th>Notation</th>
+        <th>Name</th>
+        <th>Usage</th>
+      </tr>
+      <tr>
+        <th colspan="3">Arithmetic</th>
+      </tr>
+      <tr>
+        <td>+</td>
+        <td>sum</td>
+        <td><code>1 + 2 evaluates to 3<br>
+          "Hello" + " world" evaluates to "Hello world"</code></td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>subtract</td>
+        <td><code>3 - 2 evaluates to 1</code></td>
+      </tr>
+      <tr>
+        <td>*</td>
+        <td>product</td>
+        <td><code>2 * 3 evaluates to 6</code></td>
+      </tr>
+      <tr>
+        <td>/</td>
+        <td>divide</td>
+        <td><code>6 / 3 evaluates to 2</code></td>
+      </tr>
+      <tr>
+        <td>%</td>
+        <td>modulo</td>
+        <td><code>6 % 4 evaluates to 2</code></td>
+      </tr>
+      <tr>
+        <td>&</td>
+        <td>bitwise AND</td>
+        <td><code>12 & 6 evaluates to 4</code></td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td>bitwise OR </td>
+        <td><code>12 | 6 evaluates to 14</code></td>
+      </tr>
+      <tr>
+        <td>^</td>
+        <td>bitwise XOR</td>
+        <td><code>12 ^ 6 evaluates to 10</code></td>
+      </tr>
+      <tr>
+        <td>&^</td>
+        <td>bit clear (AND NOT)</td>
+        <td><code>12 &^ 6 evaluates to 8</code></td>
+      </tr>
+      <tr>
+        <td>&lt;&lt;</td>
+        <td>left shift</td>
+        <td><code>1 &lt;&lt; 4 evaluates to 16</code></td>
+      </tr>
+      <tr>
+        <td>&gt;&gt;</td>
+        <td>right shift</td>
+        <td><code>32 &gt; 1 evaluates to 16</code></td>
+      </tr>
+      <tr>
+        <th colspan="3">Comparison</th>
+      </tr>
+      <tr>
+        <td>==</td>
+        <td>equal</td>
+        <td><code>4 == 4 evaluates to true</code></td>
+      </tr>
+      <tr>
+        <td>!=</td>
+        <td>not equal</td>
+        <td><code>4 != 4 evaluates to false</code></td>
+      </tr>
+      <tr>
+        <td>&lt;</td>
+        <td>less</td>
+        <td><code>4 &lt; 5 evaluates to true</code></td>
+      </tr>
+      <tr>
+        <td>&lt;=</td>
+        <td>less or equal</td>
+        <td><code>4 &lt;= 5 evaluates to true</code></td>
+      </tr>
+      <tr>
+        <td>&gt;</td>
+        <td>greater</td>
+        <td><code>4 &gt; 5 evaluates to false</code></td>
+      </tr>
+      <tr>
+        <td>=</td>
+        <td>greater or equal</td>
+        <td><code>4 &gt;= 5 evaluates to false</code></td>
+      </tr>
+      <tr>
+        <th colspan="3">Logical</th>
+      </tr>
+      <tr>
+        <td>&&</td>
+        <td>conditional AND</td>
+        <td><code>true && false evaluates to false</code></td>
+      </tr>
+      <tr>
+        <td>||</td>
+        <td>conditional OR</td>
+        <td><code>true || false evaluates to true</code></td>
+      </tr>
+      <tr>
+        <td>!</td>
+        <td>NOT </td>
+        <td><code>true && !false evaluates to true</code></td>
+      </tr>
+    </table>
+    <h2 id="If_statements">If statements</h2>
+    <p>Use <code>if</code> statements in Go like this:</p>
+    <p class="code-wrapper"><code>if age &gt; 18 {<br>
+      &nbsp;&nbsp;canBuyAlchohol = true<br>
+    }</code></p>
+    <p>Or in duality with an <code>else</code> block:</p>
+    <p class="code-wrapper">
+      <code>if age &gt; 18 {<br>
+        &nbsp;&nbsp;canBuyAlchohol = true<br>
+      } <span class="highlight">else</span> {<br>
+        &nbsp;&nbsp;canBuyAlcohol = false<br>
+      }</code>
+    </p>
+    <p>Or with multiple <code>if</code> blocks</p>
+    <p class="code-wrapper">
+      <code>if age &gt; 18 {<br>
+        &nbsp;&nbsp;canBuyAlcohol = true<br>
+        &nbsp;&nbsp;fmt.Println("Age is older than 18")<br>
+      } <span class="highlight">else if</span> age = 18 {<br>
+        &nbsp;&nbsp;canBuyAlcohol = true<br>
+        &nbsp;&nbsp;fmt.Println("Age is 18")<br>
+      } else {<br>
+        &nbsp;&nbsp;canBuyAlcohol = false<br>
+        &nbsp;&nbsp;fmt.Println("Age is younger than 18")<br>
+      }</code>
+    </p>
+    <h2 id="Switch_cases">Switch cases</h2>
+    <p>For many <code>else if</code> statements, it may be more appropriate to use a switch case.</p>
+    <p class="code-wrapper">
+      <code>switch operatingSystem {<br>
+        case "linux":<br>
+        &nbsp;&nbsp;filesystem = "Ext4"<br>
+        case "windows":<br>
+        &nbsp;&nbsp;filesystem = "NTFS"<br>
+        default:<br>
+        &nbsp;&nbsp;filesystem = "FAT"<br>
+      }</code>
+    </p>
+    <h2 id="Loops">Loops</h2>
+    <p>In Go, there is only one loop, the <code>for</code> loop. However, the <code>for</code> loop can be used as
+      while-loop, an infinite loop, a standard for-loop with initialiser, conditional, incrementor, and an iterator
+      loop.</p>
+    <p class="code-wrapper">
+      <code><span class="highlight">// While-loop</span><br>
+        counter := 0<br>
+        for counter &lt; 10 {<br>
+        &nbsp;&nbsp;counter++<br>
+        &nbsp;&nbsp;// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9<br>
+      }<br>
+        <br>
+        <span class="highlight">// While-loop with counter declared in the for loop</span><br>
+        for counter := 0; counter &lt; 10 {<br>
+        &nbsp;&nbsp;counter++<br>
+        &nbsp;&nbsp;// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9<br>
+      }<br>
+        <br>
+        <span class="highlight">// Infinite loop</span><br>
+        for {<br>
+        &nbsp;&nbsp;fmt.Print("Hello")<br>
+        &nbsp;&nbsp;// Hello Hello Hello … (infinitely)<br>
+      }<br>
+        <br>
+        <span class="highlight">// Traditional for-loop</span><br>
+        for i := 0; i &lt; 10; i++ {<br>
+        &nbsp;&nbsp;// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9<br>
+      }<br>
+        <br>
+        <span class="highlight">// Iterator loop</span><br>
+        for letterIndex, letterValue := range "Hello" {<br>
+        &nbsp;&nbsp;fmt.Println(letterIndex, string(letterValue))<br>
+        &nbsp;&nbsp;// 0 H<br>
+        &nbsp;&nbsp;// 1 e<br>
+        &nbsp;&nbsp;// 2 l<br>
+        &nbsp;&nbsp;// 3 l<br>
+        &nbsp;&nbsp;// 4 0<br>
+      }<br>
+        <br>
+        <span class="highlight">// Iterator loop discarding the element index</span><br>
+        for _, letter := range "Hello" {<br>
+        &nbsp;&nbsp;fmt.Print(string(letter))<br>
+        &nbsp;&nbsp;// Hello<br>
+      }</code>
+    </p>
+    <p>Note: <code>range</code> is a keyword used in association with an array in loops, which returns 2 items, the
+      index, and the value. When you want to access only 1 value from a multi-returning function, use an underscore in
+      place of the unwanted item, like in the example above. An underscore is used in place of the index, and the value
+      is assigned to a variable <code>letter</code>, since we only want to receive the value, and the index can be
+      binned.</p>
+    <h2 id="Arrays">Arrays</h2>
+    <p>Arrays in Go are fixed size. Choose the size of the array and a data type to store, then declare it like this:
+    </p>
+    <p class="code-wrapper"><code>var myArray [3]string</code></p>
+    <p>This is to say that myArray is an array containing 3 <code>string</code> variables.</p>
+    <p>Assign values to indexes in the array like this:</p>
+    <p class="code-wrapper">
+      <code>myArray[0] = "Uno"<br>
+        myArray[1] = "Dos"<br>
+        myArray[3] = "Tres"<br>
+        myArray[4] = "Cuatro"<br>
+        myArray[5] = "Cinco"</code>
+    </p>
+    <p>And access values like this:</p>
+    <p class="code-wrapper">
+      <code>fmt.Println("The second item in the array is", <span class="highlight">myArray[1]</span>)<br>
+        // Dos</code>
+    </p>
+    <p>Or assign values while declaring the array like this:</p>
+    <p class="code-wrapper"><code>myArray := string{"Uno", "Dos", "Tres", "Cuatro", "Cinco"}</code></p>
+    <p>Get a slice of an array like this:</p>
+    <p class="code-wrapper"><code>someItems := myArray[<span class="highlight">1:3</span>]</code></p>
+    <p><code>someItems</code> is equal to a slice of <code>myArray</code>, containing the elements "Dos, Tres, and
+      Cuatro", as the specified range was from the 2nd element to the 4th.</p>
+    <p class="code-wrapper"><code>someOtherItems := myArray[<span class="highlight">:2</span>]</code></p>
+    <p><code>someOtherItems</code> in this example is equal to a slice of <code>myArray</code> containing "Uno, Dos, and
+      Tres", as the left side of the range was blank, Go assumes to range from the start. This also works on the other
+      side, <code>myArray[2:]</code> is a slice from the 3rd element to the last.</p>
+    <p>Declare multiple dimensions like this:</p>
+    <p class="code-wrapper">
+      <code> mySquareArray := [3][3]int{<br>
+        &nbsp;&nbsp;{1, 2, 3},<br>
+        &nbsp;&nbsp;{4, 5, 6},<br>
+        &nbsp;&nbsp;{7, 8, 9},<br>
+      } </code>
+    </p>
+    <p>This is to say that <code>mySquareArray</code> is an array containing 3 <code>int</code> arrays, each with 3
+      elements.</p>
+    <h2 id="Slices">Slices</h2>
+    <p>Slices in Go are similar to arrays, however in practice, they are much more common. Slices differ from arrays as
+      they are dynamically sized. This is to say that items can be added and removed from a slice, and the size will
+      dynamically adjust.</p>
+    <p>Declaring a slice is the same as declaring an array, but omit the size value:</p>
+    <p class="code-wrapper"><code>mySlice := []int{1, 2, 3}</code></p>
+    <p>You can append to <code>mySlice</code> with the append() function.</p>
+    <p class="code-wrapper"><code>myAppendedSlice := append(mySlice, 4, 5, 6)</code></p>
+    <p>myAppendedSlice is equal to a slice of int with elements [1, 2, 3, 4, 5, 6]</p>
+    <p>Remove an element from a slice using the append function like this:</p>
+    <p class="code-wrapper">
+      <code> i := 3 // this is the index of the element we want to remove<br>
+        mySlice = append(mySlice[:i], mySlice[i+1:]) </code>
+    </p>
+    <p>This is to say that <code>mySlice</code> is equal to a slice of <code>mySlice</code>, containing everything up to
+      <code>i</code>, and, everything from the element after <code>i</code> up to the end.</p>
+    <p>Find the length of a slice/array with <code>len()</code>, like this:</p>
+    <p class="code-wrapper">
+      <code> myArray := [5]int{1, 2, 3, 4, 5}<br>
+        fmt.Println(<span class="highlight">len(myArray)</span>)<br>
+        // 5<br>
+      </code>
+    </p>
+    <p>Find the capacity of a slice/array with <code>cap()</code>, like this:</p>
+    <p class="code-wrapper">
+      <code> myArray := [5]int{1, 2, 3, 4, 5}<br>
+        mySlice := myArray[:2]<br>
+        <br>
+        fmt.Println(len(mySlice))<br>
+        // 3<br>
+        fmt.Println(<span class="highlight">cap(mySlice)</span>)<br>
+        // 5 </code>
+    </p>
+    <h2 id="Maps">Maps</h2>
+    <p>Maps are used to store key value pairs. Declare a map like this:</p>
+    <p class="code-wrapper"><code>var myMap map[string]int</code></p>
+    <p>This is to say that myMap is a map containing keys of type <code>string</code>, and values of type
+      <code>int</code>.</p>
+    <p>Maps can be made using the <code>make</code> function.</p>
+    <p class="code-wrapper">
+      <code>myMap = <span class="highlight">make(</span>map[string]int<span class="highlight">)</span></code></p>
+    <p>Values can be initialised in the map like this:</p>
+    <p class="code-wrapper"><code>myMap["Eggs"] = 12</code></p>
+    <p>And accessed like this:</p>
+    <p class="code-wrapper"> <code> fmt.Println(<span class="highlight">myMap["Eggs"]</span>)<br>
+      // 12 </code> </p>
+    <p>Or declared and initialised at the same time like this:</p>
+    <p class="code-wrapper">
+      <code> ingredients := map[string]int{<br>
+        &nbsp;&nbsp;"Eggs": 12,<br>
+        &nbsp;&nbsp;"Flour": 180,<br>
+        &nbsp;&nbsp;"Milk": 0.5,<br>
+      } </code>
+    </p>
+    <p>Delete an element from the map using the <code>delete</code> function, like this:</p>
+    <p class="code-wrapper"><code>delete(ingredients, “Flour”)</code></p>
+    <a href="/webdev/go_advanced.html" class="button-appearance">Proceed to Go Advanced</a>
+  </article>
+  <script src="/webdev/js/main.js"></script>
+</body>
+
+</html>

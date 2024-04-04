@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" href="/webdev/img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/webdev/css/reset.css">
+  <link rel="stylesheet" href="/webdev/css/fonts.css">
+  <link rel="stylesheet" href="/webdev/css/main.css">
+  <link rel="stylesheet" id="colour-mode-stylesheet" href="/webdev/css/light-mode.css">
+  <title>Go Intro</title>
+</head>
+
+<body class="start-mid col" id="top">
+  <button id="menu" aria-roledescription="List of navigation links for mobile users."></button>
+  <nav class="start-mid" aria-expanded="false">
+    <a href="/webdev/index.html">Home</a>
+    <a href="/webdev/go_intro.html" class="active">Go Intro</a>
+    <a href="/webdev/go_setup.html">Go Setup</a>
+    <a href="/webdev/go_basics.html">Go Basics</a>
+    <a href="/webdev/go_advanced.html">Go Advanced</a>
+    <button id="colour-mode" aria-roledescription="Toggle light mode to dark mode and vice versa.">🌓</button>
+  </nav>
+  <a href="#" id="return-to-top" class="button-appearance">Return to top</a>
+  <article>
+    <h1>Go Intro</h1>
+    <hr>
+    <hr>
+    <hr>
+    <h2>Contents</h2>
+    <ol id="contents">
+      <li><a href="#What_is_Go?">What is Go?</a></li>
+      <li><a href="#History">History</a></li>
+      <li><a href="#Design">Design</a></li>
+      <li><a href="#Syntax">Syntax</a></li>
+      <li><a href="#Go_Tools">Go Tools</a></li>
+      <li><a href="#Go_Commands">Go Commands</a></li>
+      <li><a href="#Why_Go?">Why Go?</a></li>
+    </ol>
+    <h2 id="What_is_Go?">What is Go?</h2>
+    <p>Go is an open source programming language aimed at building simple, reliable, and efficient software.</p> <img
+      src="/webdev/img/gopher_image.jpg" alt="Gopher image">
+    <p><i>Gopher image by <a href="https://reneefrench.blogspot.com">Renee French</a>, licensed under <a
+          href="https://creativecommons.org/licenses/by/3.0/">Creative Commons 3.0 Attributions
+          license</a>.</i></p>
+    <p>Go is a general purpose language designed at Google by Robert Griesmer, Rob Pike, and Ken Thompson. The language
+      is statically typed, explicit, compiled, and syntactically similar to C, with the added benefits of garbage
+      collection and structural typing.</p>
+    <h2 id="History">History</h2>
+    <p>Go was designed in 2007 with the intention of improving productivity at Google. Go was first made publicly
+      available in March 2012. Since such, it has become the fastest growing language on GitHub, as well as the highest
+      paid programming language in 2018. Since Go’s release, the language has seen many iterations, and as of March 2019
+      the current release is Go 1.12, the twelfth public release.</p>
+    <p>Rob Pike, best known for his work on Go and at <a href="https://en.wikipedia.org/wiki/Bell_Labs">Bell
+        Labs</a>,
+      was also a member of the Unix team and was involved in the creation of the <a
+        href="https://en.wikipedia.org/wiki/Plan_9_from_Bell_Labs">Plan 9</a> operating system. With Ken
+      Thompson
+      (another co-author of Go), he created the UTF-8 character encoding definition.</p>
+    <p>Ken Thompson is considered a pioneer of computer science. Having worked at <a
+        href="https://en.wikipedia.org/wiki/Bell_Labs">Bell Labs</a> for most of his career, Thompson
+      designed and
+      implemented the original Unix operating system.</p>
+    <p>Go is widely used in production at Google as well as many large organisations such as Apple, IBM, Dropbox,
+      Netflix, BBC, Uber, Medium, Docker, SoundCloud, Cloudflare, Kubernetes, and many more.</p>
+    <h2 id="Design">Design</h2>
+    <p>The aim of the language was to solve problems specifically within Google, in an era of multicore, networked
+      machines and extremely large codebases. The designers of Go wanted to address criticisms of other languages used
+      at Google such as Python and C, while retaining their useful characteristics. This means Go is particularly suited
+      to development on the web, processing huge volumes of data efficiently and with high performance.</p>
+    <p>Go adopts characteristics from C++ and Java, such as static typing and run-time efficiency, as well
+      characteristics from Python and JavaScript, such as readability and usability.</p>
+    <h2 id="Syntax">Syntax</h2>
+    <p>Go modifies the syntax of C in an attempt to keep code concise and readable. Efforts have been made to make Go
+      code minimal, as to reduce the potential risk of errors. Let's analyse some syntax features of a basic
+      <code>if</code> statement in Go.</p>
+    <p class="code-wrapper"> <code>if myInt > 5 { &nbsp;&nbsp;doSomething() }</code> </p>
+    <p>The first notable feature is that there are no brackets around the conditional, contrasting the syntax of C.
+      Secondly, the opening brace is written on the same line. In other languages, the programmer may choose to write
+      the opening brace on the next line. Part of the appeal of Go is that all code is uniform and follows the same
+      structural form. To achieve this, the Go formatter will ensure the opening brace remains on the same line, as in
+      the example above. This makes working in a team or with others' code easier, as you know what to expect when
+      reading it.</p>
+    <p>Additionally, note the lack of statement terminator. Semi-colons <i>can</i> be used to terminate statements in
+      Go, however the Go formatter will remove semi-colons in an effort to keep the code as uncluttered and as readable
+      as possible.</p>
+    <p>Similarly, round brackets <i>can</i> be written around the <code>if</code> statement conditional, however this
+      too is removed by the Go formatter.</p>
+    <p>With these small differences, code remains uniform, easy to read, and easy to write.</p>
+    <h2 id="Go_Tools">Go Tools</h2>
+    <p>Popular text editors and Go IDEs will implement the following Go tools, or offer an extension which facilitates
+      them.</p>
+    <p class="code-wrapper">
+      <code>gocode: For auto-completion.<br>
+        go-outline: For symbol search in the current file.<br>
+        go-symbols: For symbol search in the current workspace.<br>
+        gopkgs: For auto-completion of unimported packages.<br>
+        guru: For the ‘Find all references’ feature.<br>
+        gorename: For renaming symbols.<br>
+        gofmt: For formatting code.<br>
+        godef: For the ‘Go to Definition’ feature.<br>
+        godoc: For the documation when hovering over a symbol.<br>
+        golint: For linting.<br>
+        dlv: For debugging.</code>
+    </p>
+    <h2 id="Go_Commands">Go Commands</h2>
+    <p>From the Go Docs:</p>
+    <p>Usage:</p>
+    <p class="code-wrapper">
+      <code>go &lt;command&gt; [arguments]</code>
+    </p>
+    <p>The commands are:</p>
+    <p class="code-wrapper">
+      <code>bug: start a bug report<br>
+        build: compile packages and dependencies<br>
+        clean: remove object files and cached files<br>
+        doc: show documentation for package or symbol<br>
+        env: print Go environment information<br>
+        fix: update packages to use new APIs<br>
+        fmt: gofmt (reformat) package sources<br>
+        generate: generate Go files by processing source<br>
+        get: download and install packages and dependencies<br>
+        install: compile and install packages and dependencies<br>
+        list: list packages or modules<br>
+        mod: module maintenance<br>
+        run: compile and run Go program<br>
+        test: test packages<br>
+        tool: run specified go tool<br>
+        version: print Go version<br>
+        vet: report likely mistakes in packages</code>
+    </p>
+    <h2 id="Why_Go?">Why Go?</h2>
+    <p>Go is embraced by many impactful and powerful organisations including Google, Apple, IBM, and those mentioned
+      above.</p>
+    <p>Go has solid credentials. It is financed by Google, and designed by pioneers in the computer science field.</p>
+    <p>Go is open source.</p>
+    <p>Go is fast, on a number of levels. Writing, compiling, and executing Go is designed to be quick and efficient.
+    </p>
+    <p>Go has fantastic support for concurrency, through the use of goroutines.</p>
+    <p>Go is garbage collected. This has a significant improvement on performance and makes concurrency more efficient.
+    </p>
+    <p>Go has useful and helpful tools, which make development in Go fluid, and makes working with other Go code easier.
+    </p> <br>
+    <a href="/webdev/go_setup.html" class="button-appearance">Proceed to Go Setup</a>
+  </article>
+  <script src="/webdev/js/main.js"></script>
+</body>
+
+</html>

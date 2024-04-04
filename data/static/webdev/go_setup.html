@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" href="/webdev/img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/webdev/css/reset.css">
+  <link rel="stylesheet" href="/webdev/css/fonts.css">
+  <link rel="stylesheet" href="/webdev/css/main.css">
+  <link rel="stylesheet" id="colour-mode-stylesheet" href="/webdev/css/light-mode.css">
+  <title>Go Setup</title>
+</head>
+
+<body class="start-mid col" id="top">
+  <button id="menu" aria-roledescription="List of navigation links for mobile users."></button>
+  <nav class="start-mid" aria-expanded="false">
+    <a href="/webdev/index.html">Home</a>
+    <a href="/webdev/go_intro.html">Go Intro</a>
+    <a href="/webdev/go_setup.html" class="active">Go Setup</a>
+    <a href="/webdev/go_basics.html">Go Basics</a>
+    <a href="/webdev/go_advanced.html">Go Advanced</a>
+    <button id="colour-mode" aria-roledescription="Toggle light mode to dark mode and vice versa.">🌓</button>
+  </nav>
+  <a href="#" id="return-to-top" class="button-appearance">Return to top</a>
+  <article>
+    <h1>Go Setup</h1>
+    <hr>
+    <hr>
+    <hr>
+    <h2>Contents</h2>
+    <ol id="contents">
+      <li><a href="#Prerequisites">Prerequisites</a></li>
+      <li><a href="#Installing_Go">Installing Go</a></li>
+      <li><a href="#Setting_Go_Paths">Setting Go Paths</a></li>
+      <li><a href="#Constructing_a_suitable_workspace">Constructing a suitable workspace</a></li>
+      <li><a href="#Hello_World">Hello World</a></li>
+    </ol>
+    <h2 id="Prerequisites">Prerequisites</h2>
+    <p>If you are installing on Linux, the user must have sudo privileges.</p>
+    <p>Instructions for how to install on other platforms will be provided.</p>
+    <h2 id="Installing_Go">Installing Go</h2>
+    <p>Visit <a href="https://golang.org/dl/">https://golang.org/dl/</a> and download the Go release for your
+      platform.
+    </p>
+    <p>Installing Go on Windows and Mac is as simple as running the installer and following through the wizard. After
+      doing this, skip to step 3, “Setting Go Paths”. If you are using Linux, continue on this step.</p>
+    <p>Locate ‘Stable versions’ and right click on linux-amd64 file, then copy the link address.</p> <img
+      src="/webdev/img/stable_version.png" alt="stable_version">
+    <p>Open a terminal and use <code>wget</code> to download the file.</p>
+    <p class="code-wrapper"> <code>cd ~ wget https://dl.google.com/go/go1.12.4.linux-amd64.tar.gz</code> </p>
+    <p>Then use <code>tar</code> to extract the tarball.</p>
+    <p class="code-wrapper"> <code>tar xvf go1.12.4.linux-amd64.tar.gz</code> </p>
+    <p>Remove the tarball.</p>
+    <p class="code-wrapper"> <code>rm go1.12.4.linux-amd64.tar.gz</code> </p>
+    <p>Now you should just have a single directory, <code>go</code>.</p>
+    <p>Give root ownership to the directory and move it to <code>/usr/local</code>. This is the default installation
+      path for Go, however you may change it if you wish.</p>
+    <p class="code-wrapper"> <code>sudo chown -R root:root go sudo mv go /usr/local </code> </p>
+    <p>Run <code>go version</code> to test the installation.</p>
+    <p>Expected output:</p>
+    <p class="code-wrapper"><code>go version go1.12.4 linux/amd64</code></p>
+    <h2 id="Setting_Go_Paths">Setting Go Paths</h2>
+    <p>The two environment variables we need are as follows.</p>
+    <p>Name: GOPATH</p>
+    <p>Value: /my/go/workspace (this is a directory of your choice)</p>
+    <p>and</p>
+    <p>Name: PATH</p>
+    <p>Value: $PATH:$GOROOT/bin:$GOPATH/bin</p>
+    <p>For Windows, go to System settings via Control Panel > System and Security> System. Go to ‘Advanced System
+      Settings’ on the left, and click ‘Environment Variables...’ from the dialogue. Under ‘User variables’ click ‘New’
+      and enter the name and value for the environment variables specified above. After this, skip to step 4,
+      “Constructing a suitable workspace”.</p>
+    <p>For Linux and Mac users, open a terminal and open <code>~/.profile</code> in an editor of your choice.</p>
+    <p>Enter the following:</p>
+    <p class="code-wrapper">
+      <code>export GOPATH=$HOME/Programming/Go<br>
+        export PATH=$PATH:$GOROOT/bin:$GOPATH/bin</code> </p>
+    <p>Replace the <code>GOPATH</code> variable value with whichever your desired Go workspace is.</p>
+    <p>Save and exit, then source the file.</p>
+    <p class="code-wrapper"><code>source ~/.profile</code></p>
+    <h2 id="Constructing_a_suitable_workspace">Constructing a suitable workspace</h2>
+    <p>Navigate to your Go workspace.</p>
+    <p class="code-wrapper"><code>cd $GOPATH</code></p>
+    <p>Visit the <a href="https://golang.org/doc/code.html#Workspaces">Go Docs</a> for full details on Go
+      workspaces.
+    </p>
+    <p>Create 3 directories in your Go workspace, <code>src</code>, <code>bin</code>, and <code>pkg</code>.</p>
+    <p class="code-wrapper"><code>mkdir src bin pkg</code></p>
+    <p><code>src</code> is used to store all Go code (yours and others’). On the top level you will have a directory for
+      your own packages, and directories for other people’s packages that you are using.</p>
+    <p>Generally, directory names for individuals are the same as their GitHub URL. However this isn’t necessary. A
+      typical <code>src</code> directory may look like this.</p>
+    <p class="code-wrapper">
+      <code>src/<br>
+        &nbsp;&nbsp;adam/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;web_server/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main.go<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;hello_world/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hello.go<br>
+        &nbsp;&nbsp;john/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;encoder/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main.go</code>
+    </p>
+    <p>So if we’re in the <code>adam</code> directory, working on the <code>web_server</code> project, we can import
+      john’s <code>encoder</code> package to our project using <code>import “john/encoder”</code>. More on this later.
+      Just know that the <code>$GOPATH/src</code> directory is where Go looks to find imported packages.</p>
+    <p><code>bin</code> is used to store binary files for our compiled projects. For example, running</p>
+    <p class="code-wrapper"><code>go install adam/web_server</code></p>
+    <p>will compile the <code>web_server</code> project and place it in the <code>bin</code> folder. There are more ways
+      to build Go programs, more on this later.</p>
+    <p><code>pkg</code> is used to store compiled package objects. They are used when compiling a Go program, linking
+      the necessary packages to the program. For example, a very common package is <code>fmt</code>, it is compiled once
+      and stored in the <code>pkg</code> folder, then can be linked to numerous unrelated Go programs, which is a big
+      space saver. You could delete everything inside the <code>pkg</code> folder, including the folder itself, and it
+      will be recreated upon compiling a Go program with the necessary files. Generally this directory can be ignored.
+    </p>
+    <h2 id="Hello_World">Hello World</h2>
+    <p>Navigate to your Go workspace source code directory.</p>
+    <p class="code-wrapper"><code>cd $GOPATH/src</code></p>
+    <p>Make a directory <code>hello_world</code> and <code>cd</code> into it.</p>
+    <p class="code-wrapper"> <code>mkdir hello_world<br>
+      cd hello_world</code> </p>
+    <p>Open the directory, or, create the file <code>hello.go</code> directly, in an editor of your choice.</p>
+    <p class="code-wrapper"><code>code .</code></p>
+    <p>To open the directory in VS Code. Then create a file <code>hello.go</code>.</p>
+    <p class="code-wrapper"><code>vim hello.go</code></p>
+    <p>To create and open the file in Vim.</p>
+    <p>Every Go program must begin with a <code>package</code> declaration.</p>
+    <p class="code-wrapper"><code>package main</code></p>
+    <p>To print to the terminal, we can use the native format package called <code>fmt</code>.</p>
+    <p class="code-wrapper"> <code>package main<br>
+      <br>
+      <span class="highlight">import "fmt"</span></code> </p>
+    <p>All Go programs must have a <code>main</code> function.</p>
+    <p class="code-wrapper">
+      <code>package main<br>
+        <br>
+        import "fmt"<br>
+        <br>
+        <span class="highlight">func main() {<br>
+      }</span></code> </p>
+    <p>In this function we can use the <code>Println</code> method from <code>fmt</code> to print a message to the
+      terminal.</p>
+    <p class="code-wrapper">
+      <code>package main<br>
+        <br>
+        import "fmt"<br>
+        <br>
+        func main() {<br>
+        &nbsp;&nbsp;<span class="highlight">fmt.Println("Hello world!")</span><br>
+      }</code>
+    </p>
+    <p>Now in the terminal run <code>go run hello.go</code></p>
+    <p>Expected output:</p>
+    <p class="code-wrapper"><code>Hello world!</code></p> <br>
+    <a href="/webdev/go_basics.html" class="button-appearance">Proceed to Go Basics</a>
+  </article>
+  <script src="/webdev/js/main.js"></script>
+</body>
+
+</html>

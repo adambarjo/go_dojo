@@ -1,0 +1,42 @@
+code {
+  background-image: linear-gradient(to right, #ff5d5d, #ffa734);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: hue 4s infinite linear;
+}
+
+body {
+  height: 100vh;
+  flex-wrap: wrap;
+}
+
+p {
+  width: 400px;
+  text-align: center;
+}
+
+button {
+  margin-top: 2rem;
+}
+
+@keyframes hue {
+  from {
+    -webkit-filter: hue-rotate(0deg);
+  }
+  to {
+    -webkit-filter: hue-rotate(-360deg);
+  }
+}
+
+@media only screen and (max-width: 320px) {
+  body>div {
+    width: 80%;
+  }
+  p {
+    width: 80%;
+  }
+  code {
+    font-size: .8rem;
+    line-height: 1.5rem;
+  }
+}
